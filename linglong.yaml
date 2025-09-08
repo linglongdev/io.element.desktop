@@ -1,0 +1,33 @@
+version: "1"
+
+package:
+  id: io.element.desktop
+  name: Element
+  version: 1.11.110.1
+  kind: app
+  description: |
+    Element is a matrix client for the desktop.
+
+command: [start-element-desktop]
+
+base: org.deepin.base/25.2.1
+
+build: |
+  dpkg-deb -R linglong/sources/element-desktop_1.11.110_amd64.deb $PREFIX/tmp
+  mv $PREFIX/tmp/opt/Element $PREFIX
+  mv $PREFIX/tmp/usr/share $PREFIX
+  rm -rf $PREFIX/tmp
+  sed -i 's|/opt/Element/element-desktop|start-element-desktop|g' $PREFIX/share/applications/element-desktop.desktop
+  mkdir -p $PREFIX/bin
+  envsubst < start-element-desktop > $PREFIX/bin/start-element-desktop
+  chmod +x $PREFIX/bin/start-element-desktop
+
+sources:
+  - kind: file
+    url: https://packages.element.io/debian/pool/main/e/element-desktop/element-desktop_1.11.110_amd64.deb
+    digest: 4c7b13d81f1482c18bdd52dedda0e84485fd9a720c91acffa57d22c218b4fe7c
+
+buildext:
+  apt:
+    depends:
+      - libsecret-1-0

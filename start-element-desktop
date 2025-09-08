@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# 检查文件是否存在，不存在则创建 ~/.config/Element/config.json
+if [ ! -f ~/.config/Element/config.json ]; then
+    mkdir -p ~/.config/Element
+    echo '{"default_server_name": "deepin.org"}' > ~/.config/Element/config.json
+fi
+
+$PREFIX/Element/element-desktop "$@"
